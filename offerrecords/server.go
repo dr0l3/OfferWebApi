@@ -23,6 +23,7 @@ func allItemsHandler(c *gin.Context) {
 	records, err := fetchAllOfferRecords(dbCon.Db)
 	if err != nil {
 		c.JSON(400, gin.H{"error": "error during fetching of records: " + err.Error()})
+		return
 	}
 	c.JSON(200, records)
 }
