@@ -1,0 +1,26 @@
+Tables
+- Offers
+	- Item			text
+	- priceper 		double
+	- unit			text
+	- duration_start	date
+	- duration_end		date
+	- brand			text
+	- store			text
+
+operations
+- Insert new offerline 
+- get all offerlines for specific item (optional brand, store, date, sort_by)
+- get all offerlines for specific store (optional item, brand, date, sort_by)
+
+Integrations
+- some kind of recipe site
+- location of nearby stores?
+
+Status
+- db web api done
+- data insertion script not done
+- data visualization server not done
+- data discovery not done
+- website with login and reporting not done
+
