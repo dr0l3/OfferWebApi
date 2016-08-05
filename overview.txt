@@ -24,3 +24,27 @@ Status
 - data discovery not done
 - website with login and reporting not done
 
+
+SQL TO CREATE DATABASE
+
+create database offerdb;
+
+use offerdb;
+
+create table offers( id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, itemname VARCHAR(20) NOT NULL, priceper DOUBLE NOT NULL, unit VARCHAR(10), duration_start DATE NOT NULL, duration_end DATE NOT NULL, brand VARCHAR(30), store VARCHAR(15) NOT NULL ) ENGINE = InnoDB;
+
+alter table offers add constraint noduplicates unique(itemname,priceper,unit,duration_start,duration_end,brand,store);
+
+mysql> describe offers;
++----------------+-------------+------+-----+---------+----------------+
+| Field          | Type        | Null | Key | Default | Extra          |
++----------------+-------------+------+-----+---------+----------------+
+| id             | int(11)     | NO   | PRI | NULL    | auto_increment |
+| itemname       | varchar(20) | YES  | MUL | NULL    |                |
+| priceper       | double      | NO   |     | NULL    |                |
+| unit           | varchar(10) | YES  |     | NULL    |                |
+| duration_start | date        | NO   |     | NULL    |                |
+| duration_end   | date        | NO   |     | NULL    |                |
+| brand          | varchar(30) | YES  |     | NULL    |                |
+| store          | varchar(15) | YES  |     | NULL    |                |
++----------------+-------------+------+-----+---------+----------------+
