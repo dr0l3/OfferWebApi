@@ -15,8 +15,9 @@ type DatabaseConnection struct {
 func NewConnection(name string) *DatabaseConnection {
 	user := os.Getenv("DBUSER")
 	password := os.Getenv("DBPASSWORD")
+	databaseaddress := os.Getenv("DATBASEADDRESS")
 	databasename := os.Getenv("DBNAME")
-	openstring := user + ":" + password + "@/" + databasename + "?parseTime=true"
+	openstring := user + ":" + password + "@/" + databaseaddress + databasename + "?parseTime=true"
 
 	db, _ := sql.Open("mysql", openstring)
 	return &DatabaseConnection{db, name}
