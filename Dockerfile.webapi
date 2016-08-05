@@ -1,0 +1,7 @@
+FROM golang
+
+ADD . /go/src/github.com/dr0l3/offerwebapi
+RUN go install github.com/dr0l3/offerwebapi
+ENTRYPOINT /go/bin/offerwebapi
+
+EXPOSE 8080
