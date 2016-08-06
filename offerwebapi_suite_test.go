@@ -2,6 +2,8 @@ package main_test
 
 import (
 	"fmt"
+	"log"
+	"os"
 	"time"
 
 	. "github.com/dr0l3/offerwebapi/offerrecords"
@@ -13,6 +15,11 @@ import (
 )
 
 func TestOfferwebapi(t *testing.T) {
+	databaseaddress := os.Getenv("DBADDRESS")
+	if databaseaddress == "" {
+		log.Println("Database address not set. Do -> export DBADDRESS={IP if database}")
+		return
+	}
 	defineFactories()
 	RegisterFailHandler(Fail)
 	RunSpecs(t, "Offerwebapi Suite")
