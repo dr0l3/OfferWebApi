@@ -1,0 +1,13 @@
+FROM golang
+
+ADD . /go/src/github.com/dr0l3/offerwebapi
+RUN go get github.com/tools/godep
+WORKDIR /go/src/github.com/dr0l3/offerwebapi
+RUN godep restore
+ENV PATH $PATH:/go/bin
+RUN go install github.com/dr0l3/offerwebapi
+ENV GIN_MODE release
+ENV DBNAME offerdb
+ENTRYPOINT /go/bin/offerwebapi
+
+EXPOSE 8080

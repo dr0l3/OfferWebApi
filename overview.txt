@@ -25,7 +25,7 @@ Status
 - website with login and reporting not done
 
 
-SQL TO CREATE DATABASE
+SQL TO CREATE DATABASE in MySQL:
 
 create database offerdb;
 
@@ -48,3 +48,29 @@ mysql> describe offers;
 | brand          | varchar(30) | YES  |     | NULL    |                |
 | store          | varchar(15) | YES  |     | NULL    |                |
 +----------------+-------------+------+-----+---------+----------------+
+
+SQL to create database in postgresql:
+
+create database offerdb;
+
+\c offerdb
+
+create table offers( id SERIAL NOT NULL PRIMARY KEY, itemname VARCHAR(20) NOT NULL, priceper REAL NOT NULL, unit VARCHAR(10), duration_start DATE NOT NULL, duration_end DATE NOT NULL, brand VARCHAR(30), store VARCHAR(15) NOT NULL );
+
+alter table offers add constraint noduplicates unique(itemname,priceper,unit,duration_start,duration_end,brand,store);
+
+offerdb=# \d offers
+                                    Table "public.offers"
+     Column     |         Type          |                      Modifiers
+----------------+-----------------------+-----------------------------------------------------
+ id             | integer               | not null default nextval('offers_id_seq'::regclass)
+ itemname       | character varying(20) | not null
+ priceper       | real                  | not null
+ unit           | character varying(10) |
+ duration_start | date                  | not null
+ duration_end   | date                  | not null
+ brand          | character varying(30) |
+ store          | character varying(15) | not null
+Indexes:
+    "offers_pkey" PRIMARY KEY, btree (id)
+    "noduplicates" UNIQUE CONSTRAINT, btree (itemname, priceper, unit, duration_start, duration_end, brand, store)

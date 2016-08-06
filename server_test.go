@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"time"
 
 	. "github.com/dr0l3/offerwebapi/offerrecords"
@@ -41,9 +42,24 @@ func createTestDB() *DatabaseConnection {
 	return &DatabaseConnection{db, "testdb"}
 }
 
+func createTestDBPostgres() *DatabaseConnection {
+	databaseaddress := os.Getenv("DBADDRESS")
+	connectionstring := "user=postgres dbname=offerdbtest password=test host=" + databaseaddress + " sslmode=disable"
+	db, err := sql.Open("postgres", connectionstring)
+	if err != nil {
+		log.Print("Error in connection to db: " + err.Error())
+	}
+
+	truncateStatement, _ := db.Prepare("truncate offers;")
+	defer truncateStatement.Close()
+	truncateStatement.Exec()
+
+	return &DatabaseConnection{db, "testdb"}
+}
+
 func insertOfferRecordInTestServer(db *sql.DB, offerrecord OfferRecord) error {
 	//Create the insert statement
-	insertStatement, err := db.Prepare("INSERT INTO offers (itemname, priceper, unit, duration_start, duration_end, brand, store) VALUES( ?, ?, ?, ?, ?, ?, ? )")
+	insertStatement, err := db.Prepare("INSERT INTO offers (itemname, priceper, unit, duration_start, duration_end, brand, store) VALUES( $1, $2, $3, $4, $5, $6, $7 )")
 	if err != nil {
 		log.Println("Error: " + err.Error())
 	}
@@ -59,6 +75,7 @@ func insertOfferRecordInTestServer(db *sql.DB, offerrecord OfferRecord) error {
 		offerrecord.Brand,
 		offerrecord.Store)
 	if err != nil {
+		log.Println("Error: " + err.Error())
 		return err
 	}
 
@@ -76,7 +93,7 @@ var _ = Describe("Server", func() {
 		// Set up a new server, connected to a test database,
 		// before each test.
 		dbName = "test_server"
-		dbCon = createTestDB()
+		dbCon = createTestDBPostgres()
 		server = NewServer(dbCon)
 
 		// Record HTTP responses.

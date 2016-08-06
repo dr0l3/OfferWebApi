@@ -78,7 +78,7 @@ func fetchRecordsWithParams(db *sql.DB, params map[string]string) ([]OfferRecord
 	store := params["store"]
 	sql := "SELECT * FROM offers"
 	if itemname != "" {
-		sql += " WHERE itemname COLLATE latin1_general_ci LIKE '" + itemname + "'"
+		sql += " WHERE lower(itemname) SIMILAR TO lower('" + itemname + "')"
 		firstparam = false
 	}
 	if maxprice != "" {
@@ -107,17 +107,17 @@ func fetchRecordsWithParams(db *sql.DB, params map[string]string) ([]OfferRecord
 
 	if brand != "" {
 		if firstparam {
-			sql += "WHERE brand COLLATE latin1_general_ci LIKE '" + brand + "'"
+			sql += "WHERE lower(brand) SIMILAR TO lower('" + brand + "')"
 		} else {
-			sql += " AND brand COLLATE latin1_general_ci LIKE '" + brand + "'"
+			sql += " AND lower(brand) SIMILAR TO lower('" + brand + "')"
 		}
 	}
 
 	if store != "" {
 		if firstparam {
-			sql += "WHERE store COLLATE latin1_general_ci LIKE '" + store + "'"
+			sql += "WHERE lower(store) SIMILAR TO lower('" + store + "')"
 		} else {
-			sql += " AND store COLLATE latin1_general_ci LIKE '" + store + "'"
+			sql += " AND lower(store) SIMILAR TO lower('" + store + "')"
 		}
 	}
 
@@ -133,9 +133,10 @@ func fetchAllOfferRecords(db *sql.DB) ([]OfferRecord, error) {
 
 func insertOfferRecord(db *sql.DB, offerrecord OfferRecord) error {
 	//Create the insert statement
-	insertStatement, err := db.Prepare("INSERT INTO offers (itemname, priceper, unit, duration_start, duration_end, brand, store) VALUES( ?, ?, ?, ?, ?, ?, ? )")
+	insertStatement, err :=
+		db.Prepare("INSERT INTO offers(itemname, priceper, unit, duration_start, duration_end, brand, store) VALUES ( $1, $2, $3, $4, $5, $6, $7 );")
 	if err != nil {
-		log.Println("Error: " + err.Error())
+		log.Println("Error in prepared statement: " + err.Error())
 	}
 	defer insertStatement.Close()
 
