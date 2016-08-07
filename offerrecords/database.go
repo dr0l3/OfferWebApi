@@ -32,7 +32,7 @@ func NewMySQLConnection(name string) *DatabaseConnection {
 func NewPostGresConnnection(name string) *DatabaseConnection {
 	user := os.Getenv("DBUSER")
 	password := os.Getenv("DBPASSWORD")
-	databaseaddress := os.Getenv("DATBASEADDRESS")
+	databaseaddress := os.Getenv("DBADDRESS")
 	databasename := os.Getenv("DBNAME")
 
 	connectionstring := fmt.Sprintf("user=%[1]s dbname=%[2]s password=%[3]s host=%[4]s sslmode=disable", user, databasename, password, databaseaddress)
